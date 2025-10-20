@@ -34,8 +34,13 @@ public class NurseController {
 		
 		 @PostMapping("/login")
 		 public ResponseEntity<Boolean>login(@RequestBody Nurse nurse) {
-	    	return ResponseEntity.ok(nurseRespository.findByUserAndPass(nurse.getUser(), nurse.getPass());
-	    		
+			 Optional<Nurse> optionalNurse = nurseRepository.findByUserAndPass(nurse.getUser(), nurse.getPass());
+			 if(optionalNurse.isPresent()) {
+				 return ResponseEntity.ok(true);
+			 }
+			 else {
+				 return ResponseEntity.notFound().build();	    						 
+			 }
 		 }
 }
 
