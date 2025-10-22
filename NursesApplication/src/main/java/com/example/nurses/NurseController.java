@@ -1,5 +1,7 @@
-package com.example.nurses;
+	package com.example.nurses;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +23,25 @@ public class NurseController {
 	private NurseRepository nurseRepository;
 	
 	@GetMapping("/index")
-	public @ResponseBody Iterable<Nurse> getAll() {
-		return nurseRepository.findAll();
-		
+	public @ResponseBody ResponseEntity<List<Nurse>> getAll() {
+		Iterable<Nurse> optionalNurses =  nurseRepository.findAll();
+		List<Nurse> nurses = new ArrayList<>();
+		for (Nurse nurse : optionalNurses) {
+			nurses.add(nurse);
+		}
+		return ResponseEntity.ok(nurses);
 	}
 	
 		@GetMapping("/name")
-		public Optional<Nurse> findByName(@RequestParam String name) {
-			return nurseRepository.findByName(name);
+		public ResponseEntity<Nurse> findByName(@RequestParam String name) {
+			Optional<Nurse> optionalNurse =  nurseRepository.findByName(name);
+			if(optionalNurse.isPresent()) {
+				return ResponseEntity.ok(optionalNurse.get());
+			}
+			else {
+				return ResponseEntity.notFound().build();
+			}
 		}
-		
 		
 		 @PostMapping("/login")
 		 public ResponseEntity<Boolean>login(@RequestBody Nurse nurse) {
@@ -39,7 +50,7 @@ public class NurseController {
 				 return ResponseEntity.ok(true);
 			 }
 			 else {
-				 return ResponseEntity.notFound().build();	    						 
+				 return ResponseEntity.ok(false);	    						 
 			 }
 		 }
 }

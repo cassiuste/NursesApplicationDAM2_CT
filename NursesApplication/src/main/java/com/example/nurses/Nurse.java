@@ -15,18 +15,34 @@ public class Nurse {
 	private String surname;
 	private String user;
 	private String pass;
-	
-	
-	public Nurse(String name, String surname, String user, String pass) {
+	private String email;	
+
+	public Nurse(String name, String surname, String user, String pass, String email) {
 		this.name = name;
 		this.surname = surname;
 		this.user = user;
 		this.pass = pass;
+		this.email = email;
 	}
 	
 	public Nurse() {
 	}
 
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public String getName() {
 		return name;
