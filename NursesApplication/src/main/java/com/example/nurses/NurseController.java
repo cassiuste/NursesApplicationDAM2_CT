@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,41 @@ public class NurseController {
 			 }
 		 }
 		 
+		 @GetMapping("/{id}")
+			public ResponseEntity<Nurse> findById(@PathVariable Long id) {
+				
+				Optional<Nurse> nurse =  nurseRepository.findById(id);
+				
+				if(nurse.isPresent()) {
+					return ResponseEntity.ok(nurse.get());
+				}
+				else {
+					return ResponseEntity.notFound().build();
+				}
+			
+			}
+
+			@PostMapping()
+			public ResponseEntity<Nurse>createNurse(@RequestBody Nurse nurse) {
+				try {
+					 Nurse _nurse = nurseRepository.save(
+					            new Nurse(
+					                nurse.getName(),
+					                nurse.getSurname(),
+					                nurse.getEmail(),
+					                nurse.getUser(),
+					                nurse.getPass()
+					            )
+					        );
+					  return ResponseEntity.status(HttpStatus.CREATED).body(_nurse);
+				
+				
+				}catch(Exception e){
+					
+					return ResponseEntity.badRequest().build();
+				}
+			}
+			
 		 @PutMapping("/{id}")
 			public ResponseEntity<Void> updateNurse(@PathVariable long id, @RequestBody Nurse updatedNurse){
 				try {
